@@ -61,17 +61,17 @@ func newDatabendTestingOutput(t *testing.T, cfg map[string]interface{}) outputs.
 
 	plugin := outputs.FindFactory("databend")
 	if plugin == nil {
-		t.Fatalf("clickhouse output module not registered")
+		t.Fatalf("databend output module not registered")
 	}
 
 	out, err := plugin(beat.Info{Beat: "libbeat"}, outputs.NewNilObserver(), config)
 	if err != nil {
-		t.Fatalf("Failed to initialize clickhouse output: %v", err)
+		t.Fatalf("Failed to initialize databend output: %v", err)
 	}
 
 	client := out.Clients[0].(outputs.NetworkClient)
 	if err := client.Connect(); err != nil {
-		t.Fatalf("Failed to connect to clickhouse host: %v", err)
+		t.Fatalf("Failed to connect to databend host: %v", err)
 	}
 
 	return client
