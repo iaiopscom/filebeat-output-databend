@@ -18,7 +18,7 @@ includes所在目录：beats/libbeat/publisher/includes/includes.go
 ```go
 import (
 ...
-_ "gitee.com/superqy/filebeat-output-databend"
+_ "gitee.com/shengyuan/filebeat-output-databend"
 )
 ```
 
