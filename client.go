@@ -63,7 +63,7 @@ func (c *client) Connect() error {
 	}
 	if err = connect.Ping(); err != nil {
 		c.connect = nil
-		c.log.Errorf("ping clickhouse fail: {%+v}", err)
+		c.log.Errorf("ping databend fail: {%+v}", err)
 		return err
 	}
 	c.log.Infof("new connection")
@@ -100,7 +100,7 @@ func (c *client) Publish(_ context.Context, batch publisher.Batch) error {
 }
 
 func (c *client) String() string {
-	return "clickhouse(" + c.url + ")"
+	return "databend(" + c.url + ")"
 }
 
 // publish events
@@ -194,7 +194,7 @@ func extractDataFromEvent(
 	var okEvents, failEvents []publisher.Event
 	for _, event := range data {
 		content := event.Content
-		fmt.Println(content, columns)
+		fmt.Println("content", content)
 		row, err := matchFields(content, columns)
 		if err != nil {
 			log.Errorf("match field error: {%+v}", err)
@@ -212,6 +212,7 @@ func extractDataFromEvent(
 // matchFields match field format
 func matchFields(content beat.Event, columns []string) ([]interface{}, error) {
 	row := make([]interface{}, 0)
+	fmt.Println("content.Fields", content.Fields)
 	for _, col := range columns {
 		if _, ok := content.Fields[col]; !ok {
 			return nil, errors.New("format error")
