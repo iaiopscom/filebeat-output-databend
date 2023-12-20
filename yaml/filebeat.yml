@@ -1,0 +1,25 @@
+#=========================== Filebeat inputs =============================
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /tmp/record.log
+    json:
+      keys_under_root: true
+      overwrite_keys: true
+      close_inactive: 24h
+#================================ Databend output ======================
+#----------------------------- Databend output --------------------------------
+output.databend:
+  # databend数据库配置
+  # https://github.com/databendcloud/databend-go
+  # 示例 https://{USER}:{PASSWORD}@{WAREHOUSE_HOST}:443/{DATABASE}
+  url: "http://127.0.0.1:9000/database"
+  # 接收数据的表名
+  table: ck_test_v1
+  # 数据过滤器的表列，匹配日志文件中对应的键
+  columns: ["id", "name", "created_date"]
+  # 异常重试休眠时间 单位：秒
+  retry_interval: 3
+  # 是否跳过异常事件推送 true-表示跳过执行异常实践 false-会一直重试，重试间隔为retry_interval
+  skip_unexpected_type_row: true
