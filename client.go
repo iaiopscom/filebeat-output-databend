@@ -54,10 +54,11 @@ func (c *client) Connect() error {
 		c.log.Infof("connection reuse")
 		return nil
 	}
+	c.log.Infof(c.url)
 	connect, err := sql.Open("databend", c.url)
 	if err != nil {
 		c.connect = nil
-		c.log.Errorf("open clickhouse connection fail: {%+v}", err)
+		c.log.Errorf("open databend connection fail: {%+v}", err)
 		return err
 	}
 	if err = connect.Ping(); err != nil {
@@ -193,6 +194,7 @@ func extractDataFromEvent(
 	var okEvents, failEvents []publisher.Event
 	for _, event := range data {
 		content := event.Content
+		fmt.Println(content, columns)
 		row, err := matchFields(content, columns)
 		if err != nil {
 			log.Errorf("match field error: {%+v}", err)
