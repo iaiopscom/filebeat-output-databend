@@ -173,7 +173,7 @@ func generateSql(table string, columns []string) string {
 	size := len(columns) - 1
 	var columnStr, valueStr strings.Builder
 	for i, cl := range columns {
-		columnStr.WriteString(cl)
+		columnStr.WriteString("`" + cl + "`")
 		valueStr.WriteString("?")
 		if i < size {
 			columnStr.WriteString(",")
@@ -194,7 +194,6 @@ func extractDataFromEvent(
 	var okEvents, failEvents []publisher.Event
 	for _, event := range data {
 		content := event.Content
-		fmt.Println("content", content)
 		row, err := matchFields(content, columns)
 		if err != nil {
 			log.Errorf("match field error: {%+v}", err)
@@ -212,7 +211,7 @@ func extractDataFromEvent(
 // matchFields match field format
 func matchFields(content beat.Event, columns []string) ([]interface{}, error) {
 	row := make([]interface{}, 0)
-	fmt.Println("content.Fields", content.Fields)
+
 	for _, col := range columns {
 		if _, ok := content.Fields[col]; !ok {
 			return nil, errors.New("format error")
